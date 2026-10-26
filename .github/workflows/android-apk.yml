@@ -1,0 +1,70 @@
+name: Android APK (Impostor)
+
+on:
+  push:
+    paths:
+      - 'impostor/**'
+      - '.github/workflows/android-apk.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-apk-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    defaults:
+      run:
+        working-directory: impostor
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: impostor/package-lock.json
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Typecheck e testes de lógica
+        run: |
+          npx tsc --noEmit
+          npx tsx scripts/check-logic.ts
+
+      - name: Gerar projeto nativo (expo prebuild)
+        run: npx expo prebuild --platform android --clean --no-install
+
+      - name: Compilar APK (release, assinado com a debug keystore)
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+          cd android && ./gradlew assembleRelease --no-daemon
+
+      - name: Copiar APK
+        run: cp android/app/build/outputs/apk/release/app-release.apk impostor.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: impostor-apk
+          path: impostor/impostor.apk
+
+      - name: Salvar APK na branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f impostor.apk
+          git commit -m "build: APK gerado pelo CI [skip ci]" || exit 0
+          git push origin "HEAD:${GITHUB_REF_NAME}"

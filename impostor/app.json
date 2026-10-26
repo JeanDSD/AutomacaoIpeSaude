@@ -1,0 +1,48 @@
+{
+  "expo": {
+    "name": "Impostor",
+    "slug": "impostor",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "description": "Jogo de festa do Impostor: todos recebem a palavra secreta, menos o impostor.",
+    "backgroundColor": "#0B0B14",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0B0B14"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.impostor.jogo"
+    },
+    "android": {
+      "package": "com.impostor.jogo",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "backgroundColor": "#0B0B14",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-audio",
+      "expo-font",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "buildArchs": ["armeabi-v7a", "arm64-v8a"]
+          }
+        }
+      ],
+      "./plugins/withNdkVersion"
+    ]
+  }
+}
