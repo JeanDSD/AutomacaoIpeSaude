@@ -241,5 +241,7 @@ export function buildRound({ mode, players, impostorCount, picked }: RoundInput)
     starterId: pickRandom(starters).player.id,
     clockwise: Math.random() < 0.5,
     createdAt: Date.now(),
+    eliminatedIds: [],
+    cycle: 1,
   };
 }

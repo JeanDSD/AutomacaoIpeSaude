@@ -2,8 +2,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
+import { OUTCOME_POINTS } from '../logic/game';
 import { playerColors } from '../theme/colors';
-import type { Player, Round, Scores, Settings, Theme, WordHistory } from '../types';
+import type { GameEnd, Player, Round, Scores, Settings, Theme, WordHistory } from '../types';
 import { uid } from '../utils/random';
 import { normalize, uniqueWords } from '../utils/text';
 
@@ -40,6 +41,12 @@ interface AppState {
 
   updateSettings: (patch: Partial<Settings>) => void;
   setRound: (round: Round | null) => void;
+
+  // Fluxo da partida
+  eliminatePlayer: (playerId: string) => void;
+  nextCycle: () => void;
+  /** Encerra a partida e distribui os pontos (só uma vez por rodada). */
+  finishGame: (end: GameEnd) => void;
 }
 
 export const defaultSettings: Settings = {
@@ -49,6 +56,7 @@ export const defaultSettings: Settings = {
   modeId: 'classic',
   selectedThemeIds: [],
   timerSeconds: 0,
+  speechSeconds: 30,
 };
 
 const customThemeIcons = ['star-four-points', 'cards', 'lightbulb-on', 'rocket-launch', 'crown', 'heart'] as const;
@@ -169,6 +177,27 @@ export const useAppStore = create<AppState>()(
       updateSettings: (patch) => set({ settings: { ...get().settings, ...patch } }),
 
       setRound: (round) => set({ round }),
+
+      eliminatePlayer: (playerId) => {
+        const round = get().round;
+        if (!round || round.end || round.eliminatedIds.includes(playerId)) return;
+        set({ round: { ...round, eliminatedIds: [...round.eliminatedIds, playerId] } });
+      },
+
+      nextCycle: () => {
+        const round = get().round;
+        if (!round || round.end) return;
+        set({ round: { ...round, cycle: round.cycle + 1 } });
+      },
+
+      finishGame: (end) => {
+        const round = get().round;
+        if (!round || round.end) return;
+        const { roles, points } = OUTCOME_POINTS[end.outcome];
+        const winners = round.players.filter((p) => roles.includes(p.role)).map((p) => p.player.id);
+        if (points > 0) get().addPoints(winners, points);
+        set({ round: { ...round, end } });
+      },
     }),
     {
       name: 'impostor-app-v1',

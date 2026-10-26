@@ -17,6 +17,7 @@ export type RouteName =
   | 'Settings'
   | 'Reveal'
   | 'Discussion'
+  | 'Vote'
   | 'Result';
 
 export interface Route {

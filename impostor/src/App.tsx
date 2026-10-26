@@ -25,6 +25,7 @@ import { SetupScreen } from './screens/SetupScreen';
 import { ThemeDetailScreen } from './screens/ThemeDetailScreen';
 import { ThemeSelectScreen } from './screens/ThemeSelectScreen';
 import { ThemesScreen } from './screens/ThemesScreen';
+import { VoteScreen } from './screens/VoteScreen';
 import { useAppStore } from './store/useAppStore';
 import { colors } from './theme/colors';
 
@@ -41,6 +42,7 @@ const screens: Record<RouteName, () => React.ReactNode> = {
   Settings: SettingsScreen,
   Reveal: RevealScreen,
   Discussion: DiscussionScreen,
+  Vote: VoteScreen,
   Result: ResultScreen,
 };
 

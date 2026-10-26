@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import Animated, { FadeIn, FadeOut, SlideInRight, SlideOutLeft, ZoomIn } from 'react-native-reanimated';
 
-import { playSound, stopSound } from '../audio/sounds';
+import { playSound } from '../audio/sounds';
 import { AppText } from '../components/AppText';
 import { Avatar } from '../components/Avatar';
 import { Button } from '../components/Button';
@@ -56,16 +56,16 @@ export function RevealScreen() {
     setFlipped(next);
     if (next) {
       setSeen(true);
-      haptic(current.card.tone === 'danger' ? 'heavy' : 'medium');
-      playSound(current.card.tone === 'danger' ? 'suspense' : 'reveal');
+      // Som e vibração idênticos para todos os papéis: quem está ao lado não pode
+      // descobrir o impostor pelo áudio.
+      haptic('medium');
+      playSound('reveal');
     } else {
-      stopSound('suspense');
       playSound('click');
     }
   };
 
   const passOn = () => {
-    stopSound('suspense');
     setFlipped(false);
     setSeen(false);
     if (isLast) {

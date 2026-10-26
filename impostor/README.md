@@ -11,8 +11,11 @@ Jogo de festa para celular (React Native + Expo + TypeScript): todos recebem a m
 - **Histórico sem repetição**: toda palavra sorteada é registrada por tema e não volta mais, até você liberá-la na tela *Histórico* (palavra a palavra ou o tema inteiro).
 - **22 modos de jogo**: Clássico, Quem da Roda, Impostor com Dica, Infiltrado, Impostores Cegos, Mímica, Pergunta e Resposta, Relâmpago, Primeira Letra, Conta Letras, Lista de Suspeitas, Vidente, Cúmplice, Bobo da Corte, Caos Total, Tema Oculto, Sábio Solitário, Desenho Coletivo, História em Cadeia, Só Sons, Contra o Relógio e Mestre do Jogo.
 - **UI escura** com arte vetorial (SVG), ícones, fonte Poppins, transições e animações com **Reanimated** (cartão 3D, passagem de celular, cronômetro, confete).
-- **Áudio** com `expo-audio` (sucessor oficial do `expo-av`, que foi descontinuado e não tem versão para o SDK 58): clique, revelação, suspense do impostor, vitória, derrota, whoosh, tique e alarme. Os sons são sintetizados por `scripts/gen-sounds.py`.
-- Vibração (expo-haptics), cronômetro de discussão, "última chance" do impostor e placar.
+- **Áudio** com `expo-audio` (sucessor oficial do `expo-av`, que foi descontinuado e não tem versão para o SDK 58): clique, revelação (idêntica para todos os papéis, para não entregar o impostor), suspense, vitória, derrota, whoosh, tique e alarme. Os sons são sintetizados por `scripts/gen-sounds.py`.
+- **Partida em rodadas**: discussão → **votação secreta** no celular (cada jogador vivo vota ou pula) → eliminação → nova rodada, até um lado vencer. Só é eliminado quem for o único mais votado e tiver mais votos que os "Pular"; empates não eliminam ninguém.
+- **Tempo de fala por jogador** com cronômetro visual e alarme de "passe a vez", além do cronômetro geral da discussão.
+- **Arriscar Palavra**: na sua vez, o impostor pode chutar a palavra secreta — acertou, os impostores vencem na hora; errou, está eliminado.
+- Vibração (expo-haptics) e placar.
 
 ## Estrutura
 
@@ -20,9 +23,9 @@ Jogo de festa para celular (React Native + Expo + TypeScript): todos recebem a m
 src/
   App.tsx                 # fontes, hidratação da store, navegação
   navigation/Navigator.tsx# pilha de telas com transições Reanimated
-  screens/                # Home, Players, Setup, Modes, Themes, Import, History, Reveal, Discussion, Result…
+  screens/                # Home, Players, Setup, Modes, Themes, Import, History, Reveal, Discussion, Vote, Result…
   components/             # Button, FlipCard, DraggableList, TimerRing, Logo (SVG), Confetti…
-  logic/                  # roundBuilder (papéis por modo), wordPicker (sorteio sem repetição), startRound
+  logic/                  # roundBuilder (papéis por modo), wordPicker (sorteio sem repetição), startRound, game (votação e vitória)
   data/                   # gameModes, themes/*, questions
   store/useAppStore.ts    # Zustand + persistência em AsyncStorage
   audio/sounds.ts         # efeitos sonoros (expo-audio)
@@ -35,7 +38,7 @@ plugins/withNdkVersion.js # config plugin opcional para fixar o NDK
 ```bash
 npm install
 npm run typecheck
-npm run check:logic       # testa sorteio, parser e os 22 modos
+npm run check:logic       # testa sorteio, parser, os 22 modos e a votação
 npx expo run:android      # build de desenvolvimento num aparelho/emulador
 ```
 

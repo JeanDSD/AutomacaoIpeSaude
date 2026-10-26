@@ -21,6 +21,7 @@ import { useAppStore } from '../store/useAppStore';
 import { colors, spacing } from '../theme/colors';
 
 const TIMER_OPTIONS = [0, 45, 60, 90, 120, 180, 300];
+const SPEECH_OPTIONS = [0, 15, 20, 30, 45, 60, 90];
 
 function formatTimer(s: number): string {
   if (s === 0) return 'Sem tempo';
@@ -149,6 +150,25 @@ export function SetupScreen() {
       </Animated.View>
 
       <Animated.View entering={FadeInDown.delay(240).springify()}>
+        <SectionTitle>Tempo de fala por jogador</SectionTitle>
+        <View style={[styles.chips, styles.mt]}>
+          {SPEECH_OPTIONS.map((t) => (
+            <Chip
+              key={t}
+              label={t === 0 ? 'Sem limite' : formatTimer(t)}
+              selected={settings.speechSeconds === t}
+              icon={t === 0 ? 'timer-off-outline' : 'account-voice'}
+              color={colors.primary}
+              onPress={() => updateSettings({ speechSeconds: t })}
+            />
+          ))}
+        </View>
+        <AppText variant="caption" color={colors.textDim} style={styles.mt}>
+          Cada jogador tem esse tempo na sua vez. Um alarme avisa quando é hora de passar a vez.
+        </AppText>
+      </Animated.View>
+
+      <Animated.View entering={FadeInDown.delay(300).springify()}>
         <SectionTitle>Cronômetro da discussão</SectionTitle>
         <View style={[styles.chips, styles.mt]}>
           {TIMER_OPTIONS.map((t) => (

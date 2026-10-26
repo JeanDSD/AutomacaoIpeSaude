@@ -32,6 +32,8 @@ export interface Settings {
   selectedThemeIds: string[];
   /** 0 = sem cronômetro. */
   timerSeconds: number;
+  /** Tempo máximo de fala de cada jogador na sua vez. 0 = sem limite. */
+  speechSeconds: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -113,6 +115,15 @@ export interface RoundPlayer {
   card: RevealCard;
 }
 
+/** Como a partida terminou. */
+export type Outcome = 'civilians' | 'impostor' | 'jester' | 'sage' | 'circle' | 'noImpostor';
+
+export interface GameEnd {
+  outcome: Outcome;
+  /** Frase curta explicando o desfecho. */
+  reason: string;
+}
+
 export interface Round {
   id: string;
   modeId: string;
@@ -125,4 +136,10 @@ export interface Round {
   starterId: string;
   clockwise: boolean;
   createdAt: number;
+  /** Jogadores fora da partida, na ordem em que saíram. */
+  eliminatedIds: string[];
+  /** Ciclo atual de discussão + votação (começa em 1). */
+  cycle: number;
+  /** Preenchido quando a partida termina. */
+  end?: GameEnd;
 }

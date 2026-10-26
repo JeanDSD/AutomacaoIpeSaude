@@ -15,8 +15,8 @@ export const GAME_MODES: GameMode[] = [
     rules: [
       'Na ordem da roda, cada jogador fala UMA palavra ou frase curta relacionada à palavra secreta.',
       'O impostor precisa improvisar sem saber a palavra.',
-      'Depois de 1 ou 2 voltas, todos votam juntos apontando para o suspeito.',
-      'Se o impostor for pego, ele ainda pode tentar adivinhar a palavra para roubar a vitória.',
+      'Depois de 1 ou 2 voltas, cada um vota em segredo no celular — ou pula o voto.',
+      'Na sua vez, o impostor pode "Arriscar Palavra": se acertar, vence na hora; se errar, é eliminado.',
     ],
     minPlayers: 3,
   },
@@ -210,7 +210,7 @@ export const GAME_MODES: GameMode[] = [
     name: 'Vidente',
     tagline: 'Alguém sabe quem é o impostor',
     description:
-      'Um civil é o Vidente: ele sabe quem é o impostor. Mas se o impostor for pego, ainda pode vencer adivinhando quem é o Vidente.',
+      'Um civil é o Vidente: ele sabe quem é o impostor, mas precisa guiar a roda sem virar alvo.',
     icon: 'crystal-ball',
     color: '#C084FC',
     wordSource: 'theme',
@@ -220,7 +220,7 @@ export const GAME_MODES: GameMode[] = [
     rules: [
       'O Vidente conhece a palavra E sabe quem é o impostor.',
       'Ele deve guiar a roda sem deixar óbvio que sabe de tudo.',
-      'Se o impostor for votado, os impostores têm UMA chance de apontar o Vidente. Se acertarem, vencem.',
+      'Se o Vidente for eliminado, a roda perde sua melhor pista — os impostores vão mirar nele.',
     ],
     minPlayers: 5,
   },
@@ -239,7 +239,7 @@ export const GAME_MODES: GameMode[] = [
     rules: [
       'O Cúmplice sabe a palavra e quem é o impostor (o impostor não sabe quem é o cúmplice).',
       'O Cúmplice dá dicas para ajudar o impostor a descobrir a palavra.',
-      'Se um inocente for votado, impostor e cúmplice vencem juntos.',
+      'Impostor e cúmplice vencem juntos se igualarem o número de civis vivos.',
     ],
     minPlayers: 5,
   },
@@ -277,7 +277,7 @@ export const GAME_MODES: GameMode[] = [
     rules: [
       'O app sorteia entre 0 e metade dos jogadores como impostores.',
       'Os impostores não se conhecem.',
-      'Na votação, a roda pode declarar "não há impostor" se tiver certeza.',
+      'Se a roda achar que não há impostor, todos pulam o voto. Acertaram? Vitória dos civis!',
     ],
     minPlayers: 4,
   },
@@ -314,8 +314,8 @@ export const GAME_MODES: GameMode[] = [
     rules: [
       'Só o Sábio conhece a palavra; todos os outros recebem apenas o tema.',
       'Todo mundo dá dicas fingindo saber a palavra.',
-      'No final, votem em quem vocês acham que é o Sábio.',
-      'Se o Sábio não for descoberto, ele vence. Quem acertar a palavra ganha pontos extras.',
+      'A cada rodada, votem em quem vocês acham que é o Sábio.',
+      'Se o Sábio sobreviver até restarem só dois jogadores, ele vence.',
     ],
     minPlayers: 4,
   },
@@ -388,8 +388,8 @@ export const GAME_MODES: GameMode[] = [
     timerIsDeadline: true,
     rules: [
       'O cronômetro começa assim que a discussão inicia.',
-      'Vocês precisam votar ANTES de o tempo acabar.',
-      'Se o tempo zerar sem votação, o impostor vence automaticamente.',
+      'Vocês precisam ir para a votação ANTES de o tempo acabar.',
+      'Se o tempo zerar durante a discussão, o impostor vence automaticamente.',
     ],
     minPlayers: 3,
   },
@@ -408,7 +408,7 @@ export const GAME_MODES: GameMode[] = [
     rules: [
       'O primeiro jogador da lista é o Mestre e não participa das dicas.',
       'O Mestre controla a vez de cada um, faz perguntas e pode inventar desafios.',
-      'Ele anuncia o resultado depois da votação.',
+      'O Mestre não fala nem vota: ele organiza a roda enquanto o app apura os votos.',
     ],
     minPlayers: 4,
   },
